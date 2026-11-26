@@ -3,12 +3,18 @@ import evidence from "../knowledge/evidence.json";
 import policy from "../knowledge/consultation-policy.json";
 const origin="https://79san2.github.io";
 export default {async fetch(req,env){
- const headers={"Access-Control-Allow-Origin":origin,"Access-Control-Allow-Methods":"POST, OPTIONS","Access-Control-Allow-Headers":"Content-Type","Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","Vary":"Origin"};
+ const headers={"Access-Control-Allow-Origin":origin,"Access-Control-Allow-Methods":"POST, OPTIONS","Access-Control-Allow-Headers":"Content-Type, Authorization","Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","Vary":"Origin"};
  const reply=(data,status=200)=>new Response(JSON.stringify(data),{status,headers});
  if(req.headers.get("Origin")!==origin)return reply({error:"Forbidden"},403);
  if(req.method==="OPTIONS")return new Response(null,{status:204,headers});
  if(req.method!=="POST")return reply({error:"Method not allowed"},405);
  if(!env.AI||!env.CONSULT_MODEL||env.ENABLE_CONSULT!=="true")return reply({error:"Consultation unavailable"},503);
+ if(!env.CONSULT_ACCESS_KEY||env.CONSULT_ACCESS_KEY.length<24)return reply({error:"Access not configured"},503);
+ const supplied=req.headers.get("Authorization")||"";
+ const enc=new TextEncoder();
+ const a=await crypto.subtle.digest("SHA-256",enc.encode(supplied));
+ const b=await crypto.subtle.digest("SHA-256",enc.encode("Bearer "+env.CONSULT_ACCESS_KEY));
+ if(!crypto.subtle.timingSafeEqual(a,b))return reply({error:"Unauthorized"},401);
  try{
  const raw=await req.text();if(raw.length>24000)return reply({error:"Too large"},413);
  const body=JSON.parse(raw);if(typeof body.question!=="string"||!body.question.trim()||body.question.length>4000)return reply({error:"Invalid question"},400);
