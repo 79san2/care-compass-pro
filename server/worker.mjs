@@ -9,12 +9,17 @@ export default {async fetch(req,env){
  if(req.method==="OPTIONS")return new Response(null,{status:204,headers});
  if(req.method!=="POST")return reply({error:"Method not allowed"},405);
  if(!env.AI||!env.CONSULT_MODEL||env.ENABLE_CONSULT!=="true")return reply({error:"Consultation unavailable"},503);
- if(!env.CONSULT_ACCESS_KEY||env.CONSULT_ACCESS_KEY.length<24)return reply({error:"Access not configured"},503);
+ const keys=[env.CONSULT_ACCESS_KEY,...Array.from({length:5},(_,i)=>env["TEAM_ACCESS_KEY_"+(i+1)])].filter(k=>typeof k==="string"&&k.length>=24);
+ if(!keys.length)return reply({error:"Access not configured"},503);
  const supplied=req.headers.get("Authorization")||"";
  const enc=new TextEncoder();
  const a=await crypto.subtle.digest("SHA-256",enc.encode(supplied));
- const b=await crypto.subtle.digest("SHA-256",enc.encode("Bearer "+env.CONSULT_ACCESS_KEY));
- if(!crypto.subtle.timingSafeEqual(a,b))return reply({error:"Unauthorized"},401);
+ let authorized=false;
+ for(const key of keys){
+ const b=await crypto.subtle.digest("SHA-256",enc.encode("Bearer "+key));
+ authorized=crypto.subtle.timingSafeEqual(a,b)||authorized;
+ }
+ if(!authorized)return reply({error:"Unauthorized"},401);
  try{
  const raw=await req.text();if(raw.length>24000)return reply({error:"Too large"},413);
  const body=JSON.parse(raw);if(typeof body.question!=="string"||!body.question.trim()||body.question.length>4000)return reply({error:"Invalid question"},400);
