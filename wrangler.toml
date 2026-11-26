@@ -1,0 +1,8 @@
+name = "care-compass-pro"
+main = "server/worker.mjs"
+compatibility_date = "2026-11-01"
+[ai]
+binding = "AI"
+[vars]
+ENABLE_CONSULT = "false"
+CONSULT_MODEL = ""
