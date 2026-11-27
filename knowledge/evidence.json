@@ -139,6 +139,73 @@
       "verification": "verified",
       "verificationScope": "공식 NICE 권고문 검색 색인 본문 대조; 직접 페이지 접근 제한",
       "verifiedDate": "2026-11-26"
+    },
+    {
+      "verification": "verified",
+      "verifiedDate": "2026-11-28",
+      "id": "nice-staff-supervision",
+      "title": "NICE NG11 종사자 교육·정서지원·슈퍼비전",
+      "keywords": [
+        "팀장",
+        "팀원",
+        "종사자",
+        "소진",
+        "스트레스",
+        "슈퍼비전",
+        "교육",
+        "업무",
+        "지원"
+      ],
+      "summary": "기관은 예방적 지원 교육과 정서적 지원, 도움 요청이 가능한 환경, 정기적 슈퍼비전 및 실행 점검을 제공해야 한다.",
+      "sections": "1.1.4–1.1.8",
+      "design": "공식 전문지침",
+      "limitations": "영국 지침이며 국내 제도에 맞춰 적용. 효과 크기를 제시하는 연구는 아님.",
+      "url": "https://www.nice.org.uk/guidance/ng11/chapter/recommendations",
+      "verificationScope": "공식 권고문 해당 절 대조"
+    },
+    {
+      "verification": "verified",
+      "verifiedDate": "2026-11-28",
+      "id": "hassiotis-2018",
+      "title": "Hassiotis 외 (2018) PBS 종사자 교육 군집 무작위시험",
+      "keywords": [
+        "PBS",
+        "교육",
+        "종사자",
+        "팀장",
+        "슈퍼비전",
+        "실패",
+        "도전행동",
+        "타해",
+        "자해",
+        "지원"
+      ],
+      "summary": "영국 지역사회 지적장애 서비스 23곳, 성인 246명 대상. 12개월 동안 해당 PBS 교육 방식은 통상 지원 대비 도전행동을 유의하게 감소시키지 못했다.",
+      "design": "군집 무작위시험",
+      "limitations": "특정 교육 및 실행 방식의 결과이며 PBS 전체의 무효를 의미하지 않는다. 현장 적용 충실도와 실행 여건 점검 필요.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29436314/",
+      "verificationScope": "PubMed 및 출판사 초록 대조"
+    },
+    {
+      "verification": "verified",
+      "verifiedDate": "2026-11-28",
+      "id": "pbs-manager-2018",
+      "title": "관리자 PBS 교육 평가 연구 (2018)",
+      "keywords": [
+        "PBS",
+        "팀장",
+        "관리자",
+        "교육",
+        "종사자",
+        "슈퍼비전",
+        "삶의 질",
+        "도전행동"
+      ],
+      "summary": "지역사회 서비스 관리자 50명에게 1년 교육을 실시한 비무작위 대조 연구. 도전행동 감소가 보고되었으나 이용인의 삶의 질 변화는 확인되지 않았다.",
+      "design": "비무작위 대조 연구",
+      "limitations": "무작위 배정이 아니며 국내 주간개별지원에 직접 일반화할 수 없다.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29737599/",
+      "verificationScope": "PubMed 초록 대조"
     }
   ]
 }
