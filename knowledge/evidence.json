@@ -334,13 +334,15 @@
         "의사결정",
         "돌봄윤리"
       ],
-      "summary": "법적 능력 행사에 필요한 지원 접근을 보장하고 당사자의 권리, 의지와 선호를 존중하며 부당한 영향력을 방지한다.",
-      "limitations": "국제 인권 규범이며 개별 중재 효과 연구나 국내 법률 해석이 아님.",
+      "summary": "장애인의 동등한 법적 능력과 그 행사에 필요한 지원을 보장하고 권리·의사·선호를 존중하는 안전장치를 요구한다.",
+      "limitations": "법적 능력 행사에 관한 조항으로 신체적 개입의 허용 근거로 해석하지 않는다.",
       "url": "https://www.un.org/development/desa/disabilities/convention-on-the-rights-of-persons-with-disabilities/article-12-equal-recognition-before-the-law.html",
       "design": "국제협약",
       "verification": "verified",
-      "verificationScope": "공식 웹 권고문 또는 협약 조문 대조",
-      "verifiedDate": "2026-11-28"
+      "verificationScope": "공식 기관 공개 해당 조문 확인; 전체 법령 및 해석례 미검토",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "A",
+      "sourceType": "normative"
     },
     {
       "id": "crpd-19",
@@ -353,13 +355,15 @@
         "인권",
         "고립"
       ],
-      "summary": "지역사회에서 다른 사람과 동등한 선택과 참여 기회를 보장하고 고립과 분리를 방지하는 지원 접근을 강조한다.",
+      "summary": "거주 선택, 지역사회 지원서비스 접근 및 동등한 지역사회 참여를 보장한다.",
       "limitations": "국제 인권 규범이며 개별 활동 강제의 근거가 아님.",
       "url": "https://www.un.org/development/desa/disabilities/convention-on-the-rights-of-persons-with-disabilities/article-19-living-independently-and-being-included-in-the-community.html",
       "design": "국제협약",
       "verification": "verified",
-      "verificationScope": "공식 웹 권고문 또는 협약 조문 대조",
-      "verifiedDate": "2026-11-28"
+      "verificationScope": "공식 기관 공개 해당 조문 확인; 전체 법령 및 해석례 미검토",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "A",
+      "sourceType": "normative"
     },
     {
       "id": "nice-ng11-restriction",
@@ -398,15 +402,16 @@
       ],
       "design": "국내 법령",
       "limitations": "법적 근거이며 중재 효과 연구가 아니다. 구체적 지원방법의 적법성은 개별 상황과 현행 규정에 따라 별도 검토.",
-      "verification": "verified",
-      "verificationScope": "국가법령정보센터 공개 조문 검색 결과 대조",
-      "verifiedDate": "2026-11-28"
+      "verification": "unverified",
+      "verificationScope": "해당 조문 직접 확인 보류",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "D"
     },
     {
       "id": "kr-law-29-3",
       "title": "발달장애인법 제29조의3 통합돌봄 지원",
-      "summary": "일상생활 훈련, 취미활동, 긴급돌봄, 자립생활 등에 대한 전문적·통합적 서비스 제공의 법적 근거를 규정한다.",
-      "url": "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1023873983",
+      "summary": "국가와 지방자치단체는 최중증 발달장애인에게 일상생활 훈련, 취미활동, 긴급돌봄, 자립생활 등을 전문적·통합적으로 지원하는 서비스를 제공할 수 있다.",
+      "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=012046",
       "keywords": [
         "통합돌봄",
         "활동",
@@ -417,13 +422,15 @@
       "design": "국내 법령",
       "limitations": "법적 근거이며 중재 효과 연구가 아니다. 구체적 지원방법의 적법성은 개별 상황과 현행 규정에 따라 별도 검토.",
       "verification": "verified",
-      "verificationScope": "국가법령정보센터 공개 조문 검색 결과 대조",
-      "verifiedDate": "2026-11-28"
+      "verificationScope": "공식 기관 공개 해당 조문 확인; 전체 법령 및 해석례 미검토",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "A",
+      "sourceType": "normative"
     },
     {
       "id": "kr-rule-19-3",
       "title": "발달장애인법 시행규칙 제19조의3 지원 대상 등",
-      "summary": "개별적·전문적 돌봄 필요성과 일반 돌봄 제공의 어려움에 관한 대상 기준 및 심의·방문조사 절차를 규정한다.",
+      "summary": "개별적·전문적 돌봄이 필요한 발달장애인의 지원 대상 기준 및 방문조사와 심의위원회 심의를 통한 서비스 결정 절차를 규정한다.",
       "url": "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1029182009",
       "keywords": [
         "통합돌봄",
@@ -435,8 +442,10 @@
       "design": "국내 법령",
       "limitations": "법적 근거이며 중재 효과 연구가 아니다. 구체적 지원방법의 적법성은 개별 상황과 현행 규정에 따라 별도 검토.",
       "verification": "verified",
-      "verificationScope": "국가법령정보센터 공개 조문 검색 결과 대조",
-      "verifiedDate": "2026-11-28"
+      "verificationScope": "공식 기관 공개 해당 조문 확인; 전체 법령 및 해석례 미검토",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "A",
+      "sourceType": "normative"
     }
   ]
 }
