@@ -206,6 +206,106 @@
       "limitations": "무작위 배정이 아니며 국내 주간개별지원에 직접 일반화할 수 없다.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/29737599/",
       "verificationScope": "PubMed 초록 대조"
+    },
+    {
+      "id": "burnout-review-2025",
+      "title": "Baker 등 (2025) 성인 지적·발달장애 서비스 종사자 소진 체계적 문헌고찰",
+      "design": "체계적 문헌고찰 21건",
+      "summary": "일반 대인서비스 규준 대비 정서적 탈진과 비인격화는 낮았으나 개인 성취감도 낮았다. 업무량과 정서적 탈진 관련성이 보고되었으며 역할 갈등 및 자원 부족도 고려해야 한다.",
+      "limitations": "연구 간 측정 차이로 영향 요인의 메타분석이 어려웠고 인과관계 단정 불가.",
+      "url": "https://doi.org/10.1111/jar.13325",
+      "keywords": [
+        "소진",
+        "무력감",
+        "업무",
+        "팀장",
+        "종사자",
+        "스트레스",
+        "성취감"
+      ],
+      "verification": "verified",
+      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
+      "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "staff-resources-2021",
+      "title": "도전행동 노출과 종사자의 심리적 자원 (2021)",
+      "design": "종사자 1271명 설문",
+      "summary": "도전행동 노출은 탈진 증가와 관련되었고 상사의 사회적 지원, 자기효능감 등은 낮은 탈진과 관련되었다. 노출과 탈진 관계에 대한 조절효과는 확인되지 않았다.",
+      "limitations": "횡단 설문으로 지원의 인과효과를 입증하지 못함.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7839462/",
+      "keywords": [
+        "소진",
+        "팀장",
+        "슈퍼비전",
+        "종사자",
+        "자기효능감",
+        "도전행동",
+        "지원"
+      ],
+      "verification": "verified",
+      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
+      "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "meaningful-interaction-2021",
+      "title": "이용인과 종사자의 의미 있는 상호작용 요인 (2021)",
+      "design": "체계적 혼합연구 문헌고찰 28건",
+      "summary": "이용인의 행동·정서·능력, 종사자의 지식·태도·정서대처, 팀·기관·집단 규모가 상호작용에 영향을 주는 요인으로 확인되었다. 상호작용 횟수보다 욕구에 맞는 질을 고려해야 한다.",
+      "limitations": "다양한 지적장애 정도와 서비스 환경을 포함하며 개별 중재 효과의 크기를 확정할 수 없음.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7894474/",
+      "keywords": [
+        "신뢰",
+        "관계",
+        "상호작용",
+        "의사소통",
+        "종사자",
+        "팀",
+        "거부"
+      ],
+      "verification": "verified",
+      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
+      "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "fear-burnout-2011",
+      "title": "Mills 및 Rose (2011) 도전행동, 소진 및 인지 요인",
+      "design": "종사자 78명 설문",
+      "summary": "공격당할 가능성에 대한 두려움 등 부정적 정서가 도전행동과 소진 사이의 관계를 매개하는 통계적 결과가 보고되었다.",
+      "limitations": "횡단 연구로 인과적 매개 확정 불가.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21726318/",
+      "keywords": [
+        "두려움",
+        "타해",
+        "공격",
+        "소진",
+        "안전",
+        "종사자",
+        "면담"
+      ],
+      "verification": "verified",
+      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
+      "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "aggression-wellbeing-2018",
+      "title": "공격행동 노출과 종사자 직무 안녕 (2018)",
+      "design": "100개 환경 종사자 186명 횡단 분석",
+      "summary": "객관적 공격행동 기록과 직무 안녕의 관련성은 작았다. 정서적 탈진과 긍정적 직무동기에서 근무환경별 군집 효과가 관찰되었다.",
+      "limitations": "주거서비스 연구로 인과관계 및 국내 주간지원 일반화 제한.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29678313/",
+      "keywords": [
+        "소진",
+        "타해",
+        "공격",
+        "환경",
+        "팀",
+        "업무",
+        "종사자"
+      ],
+      "verification": "verified",
+      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
+      "verifiedDate": "2026-11-28"
     }
   ]
 }
