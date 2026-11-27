@@ -6,3 +6,15 @@ binding = "AI"
 [vars]
 ENABLE_CONSULT = "true"
 CONSULT_MODEL = "@cf/openai/gpt-oss-120b"
+
+[build]
+command = "node scripts/prepare-assets.mjs"
+
+[assets]
+directory = ".worker-assets"
+binding = "ASSETS"
+run_worker_first = true
+
+[observability.logs]
+enabled = true
+invocation_logs = true

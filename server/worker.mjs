@@ -1,36 +1,103 @@
-import {consult} from "../engine/consult.mjs";
-import evidence from "../knowledge/evidence.json";
-import policy from "../knowledge/consultation-policy.json";
-const origin="https://79san2.github.io";
-export default {async fetch(req,env){
- const headers={"Access-Control-Allow-Origin":origin,"Access-Control-Allow-Methods":"POST, OPTIONS","Access-Control-Allow-Headers":"Content-Type, Authorization","Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","Vary":"Origin"};
- const reply=(data,status=200)=>new Response(JSON.stringify(data),{status,headers});
- if(req.headers.get("Origin")!==origin)return reply({error:"Forbidden"},403);
- if(req.method==="OPTIONS")return new Response(null,{status:204,headers});
- if(req.method!=="POST")return reply({error:"Method not allowed"},405);
- if(!env.AI||!env.CONSULT_MODEL||env.ENABLE_CONSULT!=="true")return reply({error:"Consultation unavailable"},503);
- const keys=[env.CONSULT_ACCESS_KEY,...Array.from({length:5},(_,i)=>env["TEAM_ACCESS_KEY_"+(i+1)])].filter(k=>typeof k==="string"&&k.length>=24);
- if(!keys.length)return reply({error:"Access not configured"},503);
- const supplied=req.headers.get("Authorization")||"";
- const enc=new TextEncoder();
- const a=await crypto.subtle.digest("SHA-256",enc.encode(supplied));
- let authorized=false;
- for(const key of keys){
- const b=await crypto.subtle.digest("SHA-256",enc.encode("Bearer "+key));
- authorized=crypto.subtle.timingSafeEqual(a,b)||authorized;
- }
- if(!authorized)return reply({error:"Unauthorized"},401);
- try{
- const raw=await req.text();if(raw.length>24000)return reply({error:"Too large"},413);
- const body=JSON.parse(raw);if(typeof body.question!=="string"||!body.question.trim()||body.question.length>4000)return reply({error:"Invalid question"},400);
- const history=Array.isArray(body.history)?body.history.filter(x=>x&&["user","assistant"].includes(x.role)&&typeof x.content==="string").slice(-6).map(x=>({role:x.role,content:x.content.slice(0,2000)})):[];
- const localReferences=Array.isArray(body.localReferences)?body.localReferences.filter(x=>x&&typeof x.title==='string'&&typeof x.excerpt==='string').slice(0,2).map(x=>({title:x.title.slice(0,200),excerpt:x.excerpt.slice(0,1500)})):[];
- const result=await consult({question:body.question,history,localReferences,evidence,policy,generate:async messages=>{const output=await env.AI.run(env.CONSULT_MODEL,{messages,max_tokens:env.CONSULT_MODEL.includes("gpt-oss")?6000:3000});
- if(typeof output.response==="string"&&output.response.trim())return output.response;
- if(typeof output.output_text==="string"&&output.output_text.trim())return output.output_text;
- if(typeof output.choices?.[0]?.message?.content==="string")return output.choices[0].message.content;
- if(Array.isArray(output.output))return output.output.filter(x=>x.type==="message"&&x.role==="assistant").flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n");
- throw Error("Unsupported model response");}});
- return reply(result);
- }catch(e){const status=Number(e?.status??e?.statusCode);const message=String(e?.message??"");if(status===429||/quota|rate limit|neuron limit|daily limit|too many requests/i.test(message))return reply({error:"Usage limit reached"},429);const code=/Unsupported model response|empty/i.test(message)?"MODEL_OUTPUT":/근거|citation/i.test(message)?"EVIDENCE_CHECK":"SERVER_GENERATION";return reply({error:"Consultation failed",code},502);}
-}};
+import { consult } from '../engine/consult.mjs';
+import evidence from '../knowledge/evidence.json' with { type: 'json' };
+import policy from '../knowledge/consultation-policy.json' with { type: 'json' };
+
+const pagesOrigin = 'https://79san2.github.io';
+const modelOutputError = 'Unsupported model response';
+
+function answerText(output) {
+  const finalParts = Array.isArray(output?.output)
+    ? output.output.filter(item => item?.type === 'message' && item.role === 'assistant')
+      .flatMap(item => Array.isArray(item.content) ? item.content : [])
+      .filter(part => part?.type === 'output_text' && typeof part.text === 'string')
+      .map(part => part.text).join('\n')
+    : '';
+  const final = [output?.response, output?.output_text, output?.choices?.[0]?.message?.content, finalParts]
+    .find(value => typeof value === 'string' && value.trim());
+  if (!final) throw Error(modelOutputError);
+  return final;
+}
+
+export default {
+  async fetch(req, env) {
+    const url = new URL(req.url);
+    const health = url.pathname === '/api/status';
+    const readsAsset = ['GET', 'HEAD'].includes(req.method) && !health && !url.pathname.startsWith('/api/');
+    if (readsAsset) return env.ASSETS.fetch(req);
+
+    const origin = req.headers.get('Origin');
+    const allowed = origin === pagesOrigin || origin === url.origin;
+    const headers = {
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+      'Vary': 'Origin',
+    };
+    if (allowed) headers['Access-Control-Allow-Origin'] = origin;
+    const reply = (data, status = 200) => Response.json(data, { status, headers });
+    if (origin && !allowed) return reply({ error: 'Forbidden' }, 403);
+    // Older installations still submit their requests to the Worker root.
+    if (!health && !['/', '/api/consult'].includes(url.pathname)) return reply({ error: 'Not found' }, 404);
+    if (req.method === 'OPTIONS' && allowed) return new Response(null, { status: 204, headers });
+    const keys = [env.CONSULT_ACCESS_KEY, ...Array.from({ length: 5 }, (_, i) => env['TEAM_ACCESS_KEY_' + (i + 1)])]
+      .filter(key => typeof key === 'string' && key.length >= 24);
+    const ready = Boolean(env.AI && env.CONSULT_MODEL && env.ENABLE_CONSULT === 'true' && keys.length);
+    if (health && req.method === 'GET') return reply({ service: 'care-compass', ready }, ready ? 200 : 503);
+    if (health || req.method !== 'POST') return reply({ error: 'Method not allowed' }, 405);
+    if (!allowed) return reply({ error: 'Forbidden' }, 403);
+    if (!ready) return reply({ error: 'Consultation unavailable' }, 503);
+
+    let stage = 'access';
+    try {
+      const supplied = req.headers.get('Authorization') || '';
+      if (!supplied.startsWith('Bearer ')) return reply({ error: 'Unauthorized' }, 401);
+      const encoder = new TextEncoder();
+      const digest = value => crypto.subtle.digest('SHA-256', encoder.encode(value));
+      const tokenHash = await digest(supplied);
+      let authorized = false;
+      for (const key of keys) {
+        const expectedHash = await digest('Bearer ' + key);
+        authorized = crypto.subtle.timingSafeEqual(tokenHash, expectedHash) || authorized;
+      }
+      if (!authorized) return reply({ error: 'Unauthorized' }, 401);
+
+      const raw = await req.text();
+      if (raw.length > 24000) return reply({ error: 'Too large' }, 413);
+      let body;
+      try { body = JSON.parse(raw); } catch { return reply({ error: 'Invalid JSON' }, 400); }
+      if (typeof body?.question !== 'string' || !body.question.trim() || body.question.length > 4000) {
+        return reply({ error: 'Invalid question' }, 400);
+      }
+      const history = Array.isArray(body.history) ? body.history
+        .filter(x => x && ['user', 'assistant'].includes(x.role) && typeof x.content === 'string')
+        .slice(-6).map(x => ({ role: x.role, content: x.content.slice(0, 2000) })) : [];
+      const localReferences = Array.isArray(body.localReferences) ? body.localReferences
+        .filter(x => x && typeof x.title === 'string' && typeof x.excerpt === 'string')
+        .slice(0, 2).map(x => ({ title: x.title.slice(0, 200), excerpt: x.excerpt.slice(0, 1500) })) : [];
+      let passes = 0;
+      const result = await consult({
+        question: body.question, history, localReferences, evidence, policy,
+        generate: async messages => {
+          stage = ++passes === 1 ? 'draft' : 'review';
+          const output = await env.AI.run(env.CONSULT_MODEL, {
+            messages, max_tokens: env.CONSULT_MODEL.includes('gpt-oss') ? 6000 : 3000,
+          });
+          return answerText(output);
+        },
+      });
+      return reply(result);
+    } catch (err) {
+      const message = String(err?.message ?? '');
+      const limited = Number(err?.status ?? err?.statusCode) === 429 ||
+        /quota|rate limit|neuron limit|daily limit|too many requests/i.test(message);
+      let code = 'SERVER_GENERATION';
+      if (stage === 'access') code = 'SERVER_AUTH';
+      else if (message === modelOutputError || /empty/i.test(message)) code = 'MODEL_OUTPUT';
+      else if (/근거|citation/i.test(message)) code = 'EVIDENCE_CHECK';
+      if (limited) code = 'USAGE_LIMIT';
+      console.warn('consultation_failed', { stage, code });
+      return reply({ error: 'Consultation failed', code }, limited ? 429 : 502);
+    }
+  },
+};
