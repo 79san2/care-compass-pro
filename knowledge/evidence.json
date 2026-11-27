@@ -370,6 +370,61 @@
       "verification": "verified",
       "verificationScope": "공식 웹 권고문 또는 협약 조문 대조",
       "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "kr-law-8",
+      "title": "발달장애인법 제8조 자기결정권의 보장",
+      "summary": "서비스 선택 및 의료행위 동의·거부 등의 자기결정권을 보장하며 의사결정에 필요한 충분한 정보와 도움 없이 의사결정능력을 판단해서는 안 된다.",
+      "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=012046",
+      "keywords": [
+        "자기결정",
+        "선택",
+        "거부",
+        "인권",
+        "의사소통",
+        "활동"
+      ],
+      "design": "국내 법령",
+      "limitations": "법적 근거이며 중재 효과 연구가 아니다. 구체적 지원방법의 적법성은 개별 상황과 현행 규정에 따라 별도 검토.",
+      "verification": "verified",
+      "verificationScope": "국가법령정보센터 공개 조문 검색 결과 대조",
+      "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "kr-law-29-3",
+      "title": "발달장애인법 제29조의3 통합돌봄 지원",
+      "summary": "일상생활 훈련, 취미활동, 긴급돌봄, 자립생활 등에 대한 전문적·통합적 서비스 제공의 법적 근거를 규정한다.",
+      "url": "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1023873983",
+      "keywords": [
+        "통합돌봄",
+        "활동",
+        "자립",
+        "지원",
+        "팀장"
+      ],
+      "design": "국내 법령",
+      "limitations": "법적 근거이며 중재 효과 연구가 아니다. 구체적 지원방법의 적법성은 개별 상황과 현행 규정에 따라 별도 검토.",
+      "verification": "verified",
+      "verificationScope": "국가법령정보센터 공개 조문 검색 결과 대조",
+      "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "kr-rule-19-3",
+      "title": "발달장애인법 시행규칙 제19조의3 지원 대상 등",
+      "summary": "개별적·전문적 돌봄 필요성과 일반 돌봄 제공의 어려움에 관한 대상 기준 및 심의·방문조사 절차를 규정한다.",
+      "url": "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1029182009",
+      "keywords": [
+        "통합돌봄",
+        "자해",
+        "공격",
+        "의사소통",
+        "지원"
+      ],
+      "design": "국내 법령",
+      "limitations": "법적 근거이며 중재 효과 연구가 아니다. 구체적 지원방법의 적법성은 개별 상황과 현행 규정에 따라 별도 검토.",
+      "verification": "verified",
+      "verificationScope": "국가법령정보센터 공개 조문 검색 결과 대조",
+      "verifiedDate": "2026-11-28"
     }
   ]
 }
