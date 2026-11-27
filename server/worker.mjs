@@ -30,5 +30,5 @@ export default {async fetch(req,env){
  if(Array.isArray(output.output))return output.output.filter(x=>x.type==="message"&&x.role==="assistant").flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n");
  throw Error("Unsupported model response");}});
  return reply(result);
- }catch{return reply({error:"Consultation failed"},502);}
+ }catch(e){const status=Number(e?.status??e?.statusCode);const message=String(e?.message??"");if(status===429||/quota|rate limit|neuron limit|daily limit|too many requests/i.test(message))return reply({error:"Usage limit reached"},429);return reply({error:"Consultation failed"},502);}
 }};
