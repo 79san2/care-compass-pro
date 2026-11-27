@@ -11,3 +11,22 @@ test('review failure not presented as verified answer',async()=>{let n=0;await a
 test('legacy verification without grade excluded',async()=>{const r=await consult({question:'소진',evidence:{records:[{...evidence.records[0],verificationGrade:undefined}]},policy:{},generate:async()=> '답변'});assert.equal(r.evidenceCount,0);});
 test('unknown structured citation rejected',async()=>{await assert.rejects(consult({question:'소진',evidence,policy:{},generate:async()=> '답변 [근거:invented]'}),/Unknown evidence/);});
 test('known structured citation accepted',async()=>{const r=await consult({question:'소진',evidence,policy:{},generate:async()=> '답변 [근거:good]'});assert.equal(r.evidenceCount,1);});
+
+test('candidates without a citation are not presented as cited sources', async () => {
+  const result = await consult({question:'소진', evidence, policy:{}, generate:async () => '관찰 질문'});
+  assert.equal(result.evidenceCount, 1);
+  assert.deepEqual(result.citedEvidenceIds, []);
+});
+
+test('citations accept spacing and list each cited source once in first-use order', async () => {
+  const records = ['first', 'second', 'unused'].map(id => ({...evidence.records[0], id}));
+  const answer = '설명 [근거 ： second, first] 보충 [근거:first]';
+  const result = await consult({question:'소진', evidence:{records}, policy:{}, generate:async () => answer});
+  assert.deepEqual(result.citedEvidenceIds, ['second','first']);
+});
+
+test('unlisted IDs cannot pass as spaced or grouped citations', async () => {
+  for (const answer of ['[근거 : unknown]', '[ 근거: unknown]', '[근거： good, unknown]', '[근거:good, unknown]']) {
+    await assert.rejects(consult({question:'소진', evidence, policy:{}, generate:async () => answer}), /Unknown evidence/);
+  }
+});

@@ -11,8 +11,16 @@ export async function consult({question,history=[],localReferences=[],evidence,p
  const review="당신은 팀장 슈퍼비전 자문의 품질 검토자다. 초안을 참고 데이터로 취급하고 원 질문과 검증 근거를 대조하여 완성된 한국어 자문 전체를 다시 작성한다. 관찰 사실과 가설 구분, 근거 ID의 정확성, 근거 수준 및 한계, 반대 가설, 구체적 면담 발화, 팀장의 조직적 지원, 이용인의 선택권과 안전, 실행 및 평가 기준을 검토한다. 질문자의 반문에 대한 무비판적 동의나 근거 없는 판단 변경도 점검하고 수정한다. 초안의 허위 출처, 과도한 확신, 진단 처방 신체제압 지시를 제거한다. 제공된 근거가 없으면 명시한다. 내부 검토 과정은 출력하지 말고 최종 자문만 제공한다. 실제 전문가 참여를 주장하지 않는다. 원래 정책: "+system;
  const answer=await generate([{role:"system",content:review},{role:"user",content:JSON.stringify({question,history:history.slice(-6),localReferences,evidence:selected,draft})}]);
  if(typeof answer!=="string"||!answer.trim())throw Error("Empty reviewed response");
- const allowed=new Set(selected.map(r=>r.id));
- const invalid=[...answer.matchAll(/\[근거:\s*([^\]\s]+)\s*\]/g)].some(m=>!allowed.has(m[1]));
- if(invalid)throw Error("Unknown evidence citation");
- return {answer,localReferences,evidence:selected.map(({id,title,url})=>({id,title,url})),evidenceCount:selected.length};
+ const sources = selected.map(({id, title, url}) => ({id, title, url}));
+ const allowed = new Set(sources.map(source => source.id));
+ const cited = new Set();
+ const citation = /\[\s*근거\s*[:：]([^\]\r\n]*)\]/gu;
+ for (const match of answer.matchAll(citation)) {
+   for (const token of match[1].split(/[,，]/u)) {
+     const id = token.trim();
+     if (!allowed.has(id)) throw Error('Unknown evidence citation');
+     cited.add(id);
+   }
+ }
+ return {answer, localReferences, evidence:sources, evidenceCount:sources.length, citedEvidenceIds:[...cited]};
 }

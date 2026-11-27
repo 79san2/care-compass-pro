@@ -125,20 +125,31 @@ function appendAnswer(question, data) {
     log.append(node);
   }
   const sources = [];
-  for (const ref of Array.isArray(data.evidence) ? data.evidence : []) {
+  const candidates = Array.isArray(data.evidence) ? data.evidence : [];
+  // Older servers only return candidates. Link exact citations from their answers.
+  const ids = Array.isArray(data.citedEvidenceIds) ? data.citedEvidenceIds
+    : candidates.filter(ref => data.answer.includes('[근거:' + ref.id + ']')).map(ref => ref.id);
+  for (const id of new Set(ids)) {
+    const ref = candidates.find(item => item.id === id);
+    if (!ref) continue;
     try {
       const url = new URL(ref.url);
       if (url.protocol !== 'https:') continue;
       const link = document.createElement('a');
       link.href = url.href;
-      link.textContent = ref.title || url.hostname;
+      link.textContent = '[' + id + '] ' + (ref.title || url.hostname);
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
+      if (!sources.length) {
+        const heading = document.createElement('p');
+        heading.textContent = '답변에서 인용한 자료';
+        log.append(heading);
+      }
       log.append(link);
       sources.push(link.textContent + ' — ' + url.href);
     } catch {}
   }
-  const text = [data.answer, sources.length ? '참고자료\n' + sources.join('\n') : ''].filter(Boolean).join('\n\n');
+  const text = [data.answer, sources.length ? '답변에서 인용한 자료\n' + sources.join('\n') : ''].filter(Boolean).join('\n\n');
   const actions = document.createElement('div');
   for (const label of ['자문 복사', '자문 공유']) {
     const button = document.createElement('button');
