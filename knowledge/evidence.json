@@ -218,9 +218,9 @@
     {
       "id": "burnout-review-2025",
       "title": "Baker 등 (2025) 성인 지적·발달장애 서비스 종사자 소진 체계적 문헌고찰",
-      "design": "체계적 문헌고찰 21건",
-      "summary": "일반 대인서비스 규준 대비 정서적 탈진과 비인격화는 낮았으나 개인 성취감도 낮았다. 업무량과 정서적 탈진 관련성이 보고되었으며 역할 갈등 및 자원 부족도 고려해야 한다.",
-      "limitations": "연구 간 측정 차이로 영향 요인의 메타분석이 어려웠고 인과관계 단정 불가.",
+      "design": "체계적 문헌고찰 21편",
+      "summary": "일반 대인서비스 규준 대비 정서적 고갈과 비인격화가 낮았으나 개인적 성취감도 낮았다. 과거 소진 개선 추세는 지속되지 않았다.",
+      "limitations": "MBI-HS 영어 연구 중심이며 국내 주간개별지원 종사자에게 직접 일반화할 수 없다.",
       "url": "https://doi.org/10.1111/jar.13325",
       "keywords": [
         "소진",
@@ -232,8 +232,10 @@
         "성취감"
       ],
       "verification": "verified",
-      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
-      "verifiedDate": "2026-11-28"
+      "verificationScope": "출판사 공식 초록 및 연구방법 일부 확인; 전문 전체 미검토",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "B",
+      "doi": "10.1111/jar.13325"
     },
     {
       "id": "staff-resources-2021",
@@ -251,9 +253,10 @@
         "도전행동",
         "지원"
       ],
-      "verification": "verified",
-      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
-      "verifiedDate": "2026-11-28"
+      "verification": "unverified",
+      "verificationScope": "2026-11-28 PMC 접근 제한으로 원문 및 초록 재검증 보류",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "D"
     },
     {
       "id": "meaningful-interaction-2021",
@@ -271,9 +274,10 @@
         "팀",
         "거부"
       ],
-      "verification": "verified",
-      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
-      "verifiedDate": "2026-11-28"
+      "verification": "unverified",
+      "verificationScope": "2026-11-28 PMC 접근 제한으로 원문 및 초록 재검증 보류",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "D"
     },
     {
       "id": "fear-burnout-2011",
@@ -300,9 +304,9 @@
     {
       "id": "aggression-wellbeing-2018",
       "title": "공격행동 노출과 종사자 직무 안녕 (2018)",
-      "design": "100개 환경 종사자 186명 횡단 분석",
-      "summary": "객관적 공격행동 기록과 직무 안녕의 관련성은 작았다. 정서적 탈진과 긍정적 직무동기에서 근무환경별 군집 효과가 관찰되었다.",
-      "limitations": "주거서비스 연구로 인과관계 및 국내 주간지원 일반화 제한.",
+      "design": "100개 지원환경 종사자 186명 횡단분석",
+      "summary": "공격행동 노출량과 직무 안녕의 관련성은 크지 않았다. 정서적 고갈과 긍정적 업무동기에 근무환경 수준의 군집효과가 관찰되었다.",
+      "limitations": "횡단분석이므로 인과관계 확정 불가.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/29678313/",
       "keywords": [
         "소진",
@@ -314,8 +318,10 @@
         "종사자"
       ],
       "verification": "verified",
-      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
-      "verifiedDate": "2026-11-28"
+      "verificationScope": "PubMed 공식 초록 확인; 전문 미검토",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "B",
+      "doi": "10.1016/j.ridd.2018.04.006"
     },
     {
       "id": "crpd-12",
