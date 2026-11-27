@@ -5,4 +5,4 @@ compatibility_date = "2026-11-01"
 binding = "AI"
 [vars]
 ENABLE_CONSULT = "true"
-CONSULT_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+CONSULT_MODEL = "@cf/openai/gpt-oss-120b"
