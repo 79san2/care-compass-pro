@@ -26,10 +26,11 @@ export default {async fetch(req,env){
  const history=Array.isArray(body.history)?body.history.filter(x=>x&&["user","assistant"].includes(x.role)&&typeof x.content==="string").slice(-6).map(x=>({role:x.role,content:x.content.slice(0,2000)})):[];
  const localReferences=Array.isArray(body.localReferences)?body.localReferences.filter(x=>x&&typeof x.title==='string'&&typeof x.excerpt==='string').slice(0,2).map(x=>({title:x.title.slice(0,200),excerpt:x.excerpt.slice(0,1500)})):[];
  const result=await consult({question:body.question,history,localReferences,evidence,policy,generate:async messages=>{const output=await env.AI.run(env.CONSULT_MODEL,{messages,max_tokens:env.CONSULT_MODEL.includes("gpt-oss")?6000:3000});
- if(typeof output.response==="string")return output.response;
+ if(typeof output.response==="string"&&output.response.trim())return output.response;
+ if(typeof output.output_text==="string"&&output.output_text.trim())return output.output_text;
  if(typeof output.choices?.[0]?.message?.content==="string")return output.choices[0].message.content;
  if(Array.isArray(output.output))return output.output.filter(x=>x.type==="message"&&x.role==="assistant").flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n");
  throw Error("Unsupported model response");}});
  return reply(result);
- }catch(e){const status=Number(e?.status??e?.statusCode);const message=String(e?.message??"");if(status===429||/quota|rate limit|neuron limit|daily limit|too many requests/i.test(message))return reply({error:"Usage limit reached"},429);return reply({error:"Consultation failed"},502);}
+ }catch(e){const status=Number(e?.status??e?.statusCode);const message=String(e?.message??"");if(status===429||/quota|rate limit|neuron limit|daily limit|too many requests/i.test(message))return reply({error:"Usage limit reached"},429);const code=/Unsupported model response|empty/i.test(message)?"MODEL_OUTPUT":/근거|citation/i.test(message)?"EVIDENCE_CHECK":"SERVER_GENERATION";return reply({error:"Consultation failed",code},502);}
 }};
