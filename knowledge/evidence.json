@@ -50,7 +50,9 @@
       "summary": "중증장애 성인 4명에게 기능평가와 맞춤형 직업지원 적용. 직무 수행 기준에 도달했고 해당 지역사회 및 직업훈련 환경에서 문제행동이 관찰되지 않았다고 보고.",
       "limitations": "다른 환경까지 효과가 지속되는지는 별도 확인 필요. 활동의 의미와 환경을 검토할 때 참고.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/20560698/",
-      "verification": "기존 앱에서 이관한 자료; 원문 및 서지 재검증 필요"
+      "verification": "verified",
+      "verificationScope": "PubMed 공개 초록 대조, 전문 미검토",
+      "verifiedDate": "2026-11-28"
     },
     {
       "id": "case-4",
@@ -80,10 +82,12 @@
         "질",
         "무기력"
       ],
-      "summary": "26개 팀, 지적장애인 167명 중 123명 분석. 전체 자극과민 감소 차이는 유의하지 않았으나 무기력 감소 및 자기결정·개인발달 개선 보고.",
+      "summary": "26개 주거지원팀, 167명 중 123명 분석. 전체 자극과민 감소는 유의하지 않았으나 무기력 감소 및 자기결정과 개인발달 개선이 보고됨.",
       "limitations": "비무작위 연구이며 하위집단 결과의 일반화에 주의. 행동 빈도 외 결과도 관찰할 필요.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/37899656/",
-      "verification": "기존 앱에서 이관한 자료; 원문 및 서지 재검증 필요"
+      "verification": "verified",
+      "verificationScope": "PubMed 공개 초록 대조, 전문 미검토",
+      "verifiedDate": "2026-11-28"
     },
     {
       "id": "nice-ng11",
@@ -305,6 +309,66 @@
       ],
       "verification": "verified",
       "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
+      "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "crpd-12",
+      "title": "유엔 장애인권리협약 제12조",
+      "keywords": [
+        "자기결정",
+        "인권",
+        "선택",
+        "거부",
+        "의사결정",
+        "돌봄윤리"
+      ],
+      "summary": "법적 능력 행사에 필요한 지원 접근을 보장하고 당사자의 권리, 의지와 선호를 존중하며 부당한 영향력을 방지한다.",
+      "limitations": "국제 인권 규범이며 개별 중재 효과 연구나 국내 법률 해석이 아님.",
+      "url": "https://www.un.org/development/desa/disabilities/convention-on-the-rights-of-persons-with-disabilities/article-12-equal-recognition-before-the-law.html",
+      "design": "국제협약",
+      "verification": "verified",
+      "verificationScope": "공식 웹 권고문 또는 협약 조문 대조",
+      "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "crpd-19",
+      "title": "유엔 장애인권리협약 제19조",
+      "keywords": [
+        "지역사회",
+        "참여",
+        "선택",
+        "활동",
+        "인권",
+        "고립"
+      ],
+      "summary": "지역사회에서 다른 사람과 동등한 선택과 참여 기회를 보장하고 고립과 분리를 방지하는 지원 접근을 강조한다.",
+      "limitations": "국제 인권 규범이며 개별 활동 강제의 근거가 아님.",
+      "url": "https://www.un.org/development/desa/disabilities/convention-on-the-rights-of-persons-with-disabilities/article-19-living-independently-and-being-included-in-the-community.html",
+      "design": "국제협약",
+      "verification": "verified",
+      "verificationScope": "공식 웹 권고문 또는 협약 조문 대조",
+      "verifiedDate": "2026-11-28"
+    },
+    {
+      "id": "nice-ng11-restriction",
+      "title": "NICE NG11 위기 대응과 최소 제한",
+      "keywords": [
+        "인권",
+        "제한",
+        "타해",
+        "자해",
+        "위험",
+        "위기",
+        "돌봄윤리",
+        "안전"
+      ],
+      "summary": "위기 대응은 예방적 지원과 병행하며 최후 수단으로 사용한다. 최소 제한 대안을 우선하고 제한적 개입의 필요성, 위험, 결과를 기록하고 검토하며 감소 계획을 마련한다.",
+      "limitations": "영국 지침으로 국내 법적 허용 여부를 결정하지 않으며 구체적 신체개입 기술 지시로 사용하지 않는다.",
+      "sections": "1.9.1–1.9.6",
+      "url": "https://www.nice.org.uk/guidance/ng11/chapter/Recommendations",
+      "design": "공식 전문지침",
+      "verification": "verified",
+      "verificationScope": "공식 웹 권고문 또는 협약 조문 대조",
       "verifiedDate": "2026-11-28"
     }
   ]
