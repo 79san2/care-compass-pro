@@ -16,12 +16,14 @@
       "summary": "중증 지적장애 성인 여성. 상황별 기능평가 후 환경과 대체 반응을 조정하고, 어머니에게 ACT 기반 심리지원 및 기관 간 협력을 제공. 대상 상황에서 자해와 보호자의 우울 증상이 감소했다고 보고. 월별 상담, 전체 기간과 수치는 초록에서 확인하지 못함.",
       "limitations": "단일 사례이고 복합 중재이므로 개별 요소의 효과를 분리할 수 없음. 가정과 기관의 대응 차이를 검토할 때 참고.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42643246/",
-      "verification": "기존 앱에서 이관한 자료; 원문 및 서지 재검증 필요"
+      "verification": "unverified",
+      "verificationGrade": "D",
+      "verificationScope": "이번 검색에서 해당 출처 직접 확인하지 못함"
     },
     {
       "id": "case-2",
-      "title": "이동 중 공격행동과 보행지원 (2018 온라인 공개)",
-      "design": "개별 사례보고",
+      "title": "Harper 및 Luiselli (2019) 이동 중 공격행동과 보행지원",
+      "design": "성인 1명 사례연구",
       "keywords": [
         "타해",
         "공격",
@@ -31,10 +33,14 @@
         "신체",
         "통증"
       ],
-      "summary": "지적장애와 신체장애가 있는 성인 남성. 이동 중 도움을 제공할 때 공격행동이 발생. 보행 보조기기를 통한 독립적인 이동 지원 후 해당 상황의 공격행동이 사라졌다고 보고. 기간은 초록에서 확인하지 못함.",
-      "limitations": "단일 사례. 보행기기 선정은 개별 재활평가가 필요하며 다른 행동에 일반화할 수 없음.",
+      "summary": "지적장애와 신체장애가 있는 남성의 이동 중 공격행동에 기능평가를 실시하고 보행훈련 보조기기를 적용하자 해당 이동 상황의 공격행동이 사라졌다고 보고했다.",
+      "limitations": "단일 사례이며 전문 미검토. 보조기기는 개별 신체평가 필요.",
       "url": "https://doi.org/10.1177/1534650118818767",
-      "verification": "기존 앱에서 이관한 자료; 원문 및 서지 재검증 필요"
+      "verification": "verified",
+      "doi": "10.1177/1534650118818767",
+      "verificationGrade": "B",
+      "verificationScope": "공식 출판사 또는 PubMed 초록 확인; 전문 미검토",
+      "verifiedDate": "2026-11-28"
     },
     {
       "id": "case-3",
@@ -50,14 +56,15 @@
       "summary": "중증장애 성인 4명에게 기능평가와 맞춤형 직업지원 적용. 직무 수행 기준에 도달했고 해당 지역사회 및 직업훈련 환경에서 문제행동이 관찰되지 않았다고 보고.",
       "limitations": "다른 환경까지 효과가 지속되는지는 별도 확인 필요. 활동의 의미와 환경을 검토할 때 참고.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/20560698/",
-      "verification": "verified",
-      "verificationScope": "PubMed 공개 초록 대조, 전문 미검토",
-      "verifiedDate": "2026-11-28"
+      "verification": "unverified",
+      "verificationScope": "이번 검색에서 해당 출처 직접 확인하지 못함",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "D"
     },
     {
       "id": "case-4",
-      "title": "기관 전체 지원환경 개선 (2018)",
-      "design": "군집 무작위시험",
+      "title": "McGill 외 (2018) 기관 전체 긍정적 행동지원",
+      "design": "지원주거 환경 24곳 군집 무작위시험",
       "keywords": [
         "조직",
         "팀",
@@ -65,15 +72,19 @@
         "PBS",
         "환경"
       ],
-      "summary": "24개 지원주거 환경. 관리자 및 종사자 코칭과 8~11개월 모니터링을 포함한 환경 개선. 도전행동 감소 차이는 12~18개월 추적에서도 유지되었으나 삶의 질 차이는 유의하지 않았음.",
-      "limitations": "주거서비스 집단 연구로 주간개별지원에 그대로 적용할 수 없음.",
+      "summary": "관리자 및 종사자 코칭과 8~11개월 모니터링을 포함한 환경 개선으로 도전행동 평가가 대조군보다 감소했고 추적관찰에도 차이가 유지되었다. 삶의 질 차이는 유의하지 않았다.",
+      "limitations": "지원주거 연구로 주간개별지원에 직접 일반화 불가.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/29752027/",
-      "verification": "기존 앱에서 이관한 자료; 원문 및 서지 재검증 필요"
+      "verification": "verified",
+      "doi": "10.1016/j.ridd.2018.04.020",
+      "verificationGrade": "B",
+      "verificationScope": "공식 출판사 또는 PubMed 초록 확인; 전문 미검토",
+      "verifiedDate": "2026-11-28"
     },
     {
       "id": "case-5",
-      "title": "직접지원 종사자 PBS와 삶의 질 (2024)",
-      "design": "비무작위 군집 대조 연구",
+      "title": "Bruinsma 외 (2024) 직접지원 종사자 PBS",
+      "design": "26개 팀 비무작위 군집 대조연구",
       "keywords": [
         "PBS",
         "활동",
@@ -82,12 +93,14 @@
         "질",
         "무기력"
       ],
-      "summary": "26개 주거지원팀, 167명 중 123명 분석. 전체 자극과민 감소는 유의하지 않았으나 무기력 감소 및 자기결정과 개인발달 개선이 보고됨.",
-      "limitations": "비무작위 연구이며 하위집단 결과의 일반화에 주의. 행동 빈도 외 결과도 관찰할 필요.",
+      "summary": "이용인 167명과 종사자 245명이 배정되었으며 분석 대상은 123명. 전체 과민성 감소의 집단 차이는 유의하지 않았으나 무기력 행동 감소 및 개인적 발달과 자기결정 영역 개선이 보고되었다.",
+      "limitations": "비무작위 연구이며 하위집단 결과를 전체 이용인에게 일반화하지 않는다.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/37899656/",
       "verification": "verified",
-      "verificationScope": "PubMed 공개 초록 대조, 전문 미검토",
-      "verifiedDate": "2026-11-28"
+      "verificationScope": "공식 출판사 또는 PubMed 초록 확인; 전문 미검토",
+      "verifiedDate": "2026-11-28",
+      "doi": "10.1111/jar.13164",
+      "verificationGrade": "B"
     },
     {
       "id": "nice-ng11",
