@@ -188,7 +188,9 @@
       "design": "군집 무작위시험",
       "limitations": "특정 교육 및 실행 방식의 결과이며 PBS 전체의 무효를 의미하지 않는다. 현장 적용 충실도와 실행 여건 점검 필요.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/29436314/",
-      "verificationScope": "PubMed 및 출판사 초록 대조"
+      "verificationScope": "PubMed 공식 공개 초록 확인; 전문 미검토",
+      "verificationGrade": "B",
+      "doi": "10.1192/bjp.2017.34"
     },
     {
       "verification": "verified",
@@ -209,7 +211,9 @@
       "design": "비무작위 대조 연구",
       "limitations": "무작위 배정이 아니며 국내 주간개별지원에 직접 일반화할 수 없다.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/29737599/",
-      "verificationScope": "PubMed 초록 대조"
+      "verificationScope": "PubMed 공식 공개 초록 확인; 전문 미검토",
+      "verificationGrade": "B",
+      "doi": "10.1111/jar.12460"
     },
     {
       "id": "burnout-review-2025",
@@ -288,8 +292,10 @@
         "면담"
       ],
       "verification": "verified",
-      "verificationScope": "공개 초록 또는 공개 본문 검색 결과 대조; 전문 전체 미검토",
-      "verifiedDate": "2026-11-28"
+      "verificationScope": "PubMed 공식 공개 초록 확인; 전문 미검토",
+      "verifiedDate": "2026-11-28",
+      "verificationGrade": "B",
+      "doi": "10.1111/j.1365-2788.2011.01438.x"
     },
     {
       "id": "aggression-wellbeing-2018",
