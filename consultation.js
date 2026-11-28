@@ -76,6 +76,18 @@ function offerDirectSite() {
   direct('alternate').hidden = location.origin === workerOrigin;
 }
 
+function authorization(key) {
+  if (/^[\x20-\x7e]+$/.test(key)) return 'Bearer ' + key;
+  const bytes = new TextEncoder().encode(key);
+  return 'Compass-UTF8 ' + btoa(Array.from(bytes, byte => String.fromCharCode(byte)).join(''));
+}
+
+async function checkServer(signal) {
+  const response = await fetch(workerOrigin + '/api/status', { signal, cache: 'no-store', credentials: 'omit' });
+  const data = await response.json().catch(() => null);
+  return { connected: data?.service === 'care-compass', ready: response.ok && data?.ready, status: response.status };
+}
+
 direct('checkConnection').addEventListener('click', async () => {
   const button = direct('checkConnection');
   const state = direct('connectionState');
@@ -84,13 +96,12 @@ direct('checkConnection').addEventListener('click', async () => {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 12000);
   try {
-    const response = await fetch(workerOrigin + '/api/status', { signal: controller.signal, cache: 'no-store', credentials: 'omit' });
-    const data = await response.json().catch(() => null);
-    if (data?.service === 'care-compass') {
-      state.textContent = response.ok && data.ready ? '서버 연결 및 자문 설정 확인. 실제 답변은 자문 요청 후 확인할 수 있습니다.'
+    const check = await checkServer(controller.signal);
+    if (check.connected) {
+      state.textContent = check.ready ? '서버 연결 및 자문 설정 확인. 실제 답변은 자문 요청 후 확인할 수 있습니다.'
         : '서버에 연결되었습니다. 운영 설정을 확인해야 합니다.';
     } else {
-      state.textContent = '연결 확인용 응답을 받지 못했습니다 (HTTP ' + response.status + ').';
+      state.textContent = '연결 확인용 응답을 받지 못했습니다 (HTTP ' + check.status + ').';
     }
   } catch {
     state.textContent = controller.signal.aborted ? '연결 확인 시간이 초과되었습니다.' : '이 주소에서 서버에 연결할 수 없습니다.';
@@ -100,6 +111,37 @@ direct('checkConnection').addEventListener('click', async () => {
     button.disabled = false;
   }
 });
+
+async function readConsultation(response, onStage) {
+  if (!response.headers.get('Content-Type')?.includes('application/x-ndjson')) {
+    const body = await response.text();
+    let data = null;
+    try { data = JSON.parse(body); } catch {}
+    return { status: response.status, data };
+  }
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      buffer += decoder.decode(value, { stream: !done });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      if (done && buffer) lines.push(buffer);
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        const event = JSON.parse(line);
+        if (Number.isInteger(event?.status) && event.data) return event;
+        if (event?.stage === 'draft' || event?.stage === 'review') onStage(event.stage);
+      }
+      if (done) throw Error('Incomplete consultation response');
+    }
+  } finally {
+    await reader.cancel().catch(() => {});
+    reader.releaseLock();
+  }
+}
 
 function selectLocalReferences(question) {
   try {
@@ -191,36 +233,46 @@ async function askDirect() {
   activeRequest = controller;
   direct('askButton').disabled = true;
   direct('alternate').hidden = true;
-  status.textContent = '자문을 작성하고 근거를 검토하고 있습니다…';
-  const timer = setTimeout(() => controller.abort(), 180000);
+  status.textContent = '자문 서버에 질문을 보내고 있습니다…';
+  let timer;
+  let stage = '';
+  const stageLabels = { draft: '자문 초안 작성', review: '근거와 답변 검토' };
+  function startTimer() {
+    clearTimeout(timer);
+    timer = setTimeout(() => controller.abort(), 180000);
+  }
+  startTimer();
   let receivedHeaders = false;
   try {
     const response = await fetch(workerOrigin + '/api/consult', {
       method: 'POST', credentials: 'omit', signal: controller.signal,
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + accessKey },
+      headers: { 'Content-Type': 'application/json', Accept: 'application/x-ndjson', Authorization: authorization(accessKey) },
       body: JSON.stringify({ question, history, localReferences }),
     });
     if (activeRequest !== controller) return;
     receivedHeaders = true;
     if (response.status === 401) {
       pendingQuestion = true;
-      removeKey();
-      status.textContent = '서버가 인증키를 거절했습니다. 키를 다시 입력해 주세요.';
+      status.textContent = '서버가 현재 인증키를 거절했습니다 (HTTP 401). 질문은 그대로 있습니다. 인증키를 확인해 주세요.';
       showKeyForm(true);
       return;
     }
-    const raw = await response.text();
-    let data = null;
-    try { data = JSON.parse(raw); } catch {}
+    const result = await readConsultation(response, nextStage => {
+      if (activeRequest !== controller || stage === nextStage) return;
+      stage = nextStage;
+      status.textContent = '질문이 접수되었습니다. ' + stageLabels[stage] + ' 중…';
+      startTimer();
+    });
+    const { data } = result;
     if (activeRequest !== controller) return;
-    if (!response.ok) {
+    if (result.status !== 200) {
       const hints = { 400:'질문 형식을 확인해 주세요.', 403:'서버가 이 주소의 접근을 허용하지 않았습니다.',
         413:'질문 길이를 줄여 주세요.', 429:'사용량 한도에 도달했습니다. 잠시 후 이용해 주세요.',
         503:'서버의 자문 설정을 확인해야 합니다.' };
       const codes = ['MODEL_OUTPUT','EVIDENCE_CHECK','SERVER_GENERATION','SERVER_AUTH','USAGE_LIMIT'];
       const code = codes.includes(data?.code) ? ' · ' + data.code : '';
-      status.textContent = (hints[response.status] || '서버에서 자문을 완료하지 못했습니다.') + ' (HTTP ' + response.status + code + ')';
-      if (response.status === 403) offerDirectSite();
+      status.textContent = (hints[result.status] || '서버에서 자문을 완료하지 못했습니다.') + ' (' + (stage ? stageLabels[stage] + ' · ' : '') + result.status + code + ')';
+      if (result.status === 403) offerDirectSite();
       return;
     }
     if (!data || typeof data.answer !== 'string' || !data.answer.trim()) {
@@ -233,9 +285,21 @@ async function askDirect() {
     status.textContent = '자문 답변 완료';
   } catch {
     if (activeRequest !== controller) return;
-    status.textContent = controller.signal.aborted ? '응답을 기다리는 시간이 초과되었습니다. 질문을 유지했습니다.'
-      : receivedHeaders ? '서버 응답을 끝까지 읽지 못했습니다. 질문을 유지했습니다.'
-      : '자문 서버에 연결할 수 없습니다. 질문과 인증키를 유지했습니다.';
+    const point = stageLabels[stage] || (receivedHeaders ? '답변 수신' : '접수 확인');
+    if (controller.signal.aborted) {
+      status.textContent = point + ' 대기 시간이 초과되었습니다. 질문과 인증키는 그대로 있습니다.';
+    } else if (receivedHeaders) {
+      status.textContent = point + ' 중 응답이 끊겼습니다. 질문과 인증키는 그대로 있습니다.';
+    } else {
+      status.textContent = '질문 접수 여부를 확인할 수 없어 서버 연결을 점검하고 있습니다…';
+      clearTimeout(timer);
+      timer = setTimeout(() => controller.abort(), 8000);
+      const check = await checkServer(controller.signal).catch(() => null);
+      if (activeRequest !== controller) return;
+      const detail = check?.connected ? '서버 연결은 확인됐지만 질문 접수 응답을 받지 못했습니다.'
+        : '이 기기에서 서버 상태와 질문 접수 여부를 확인할 수 없습니다.';
+      status.textContent = detail + ' 질문과 인증키는 그대로 있습니다.';
+    }
     offerDirectSite();
   } finally {
     clearTimeout(timer);

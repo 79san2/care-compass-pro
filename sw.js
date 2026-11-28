@@ -1,4 +1,4 @@
-const CACHE = 'care-compass-pro-v3';
+const CACHE = 'care-compass-pro-v4';
 const shell = ['./', './consultation.js', './manifest.json', './icon.svg', './knowledge/dedup.mjs', './knowledge/evidence.json'];
 const urls = new Set(shell.map(path => new URL(path, self.registration.scope).href));
 self.addEventListener('install', event => event.waitUntil(

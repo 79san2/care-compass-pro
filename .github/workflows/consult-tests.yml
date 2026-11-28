@@ -2,6 +2,8 @@ name: Consultation tests
 on:
   push:
     paths:
+      - 'server/**'
+      - 'consultation.js'
       - 'engine/**'
       - 'knowledge/**'
       - 'tests/**'
