@@ -39,6 +39,9 @@ function cancelRequest() {
 }
 function clearDirect() {
   cancelRequest();
+  window.consultationVoice?.stop();
+  if (direct('voiceStatus')) direct('voiceStatus').textContent = '';
+  setConversationMode(false);
   pendingQuestion = false;
   refreshKeyState();
   directHistory.length = 0;
@@ -158,41 +161,148 @@ function selectLocalReferences(question) {
   } catch { return []; }
 }
 
-function appendAnswer(question, data) {
-  const log = direct('directChat');
-  for (const [kind, value] of [['user', question], ['assistant', data.answer]]) {
-    const node = document.createElement('div');
-    node.className = 'chatmsg ' + kind;
-    node.textContent = value;
-    log.append(node);
-  }
-  const sources = [];
+function node(tag, text) {
+  const element = document.createElement(tag);
+  if (text) element.textContent = text;
+  return element;
+}
+
+function citedSources(data) {
   const candidates = Array.isArray(data.evidence) ? data.evidence : [];
-  // Older servers only return candidates. Link exact citations from their answers.
   const ids = Array.isArray(data.citedEvidenceIds) ? data.citedEvidenceIds
     : candidates.filter(ref => data.answer.includes('[근거:' + ref.id + ']')).map(ref => ref.id);
+  const sources = new Map();
   for (const id of new Set(ids)) {
     const ref = candidates.find(item => item.id === id);
     if (!ref) continue;
     try {
       const url = new URL(ref.url);
-      if (url.protocol !== 'https:') continue;
-      const link = document.createElement('a');
-      link.href = url.href;
-      link.textContent = '[' + id + '] ' + (ref.title || url.hostname);
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      if (!sources.length) {
-        const heading = document.createElement('p');
-        heading.textContent = '답변에서 인용한 자료';
-        log.append(heading);
-      }
-      log.append(link);
-      sources.push(link.textContent + ' — ' + url.href);
+      if (url.protocol === 'https:') sources.set(id, { title: ref.title || url.hostname, href: url.href, number: sources.size + 1 });
     } catch {}
   }
-  const text = [data.answer, sources.length ? '답변에서 인용한 자료\n' + sources.join('\n') : ''].filter(Boolean).join('\n\n');
-  const actions = document.createElement('div');
+  return sources;
+}
+
+function sourceLink(ref, label) {
+  const link = node('a', label);
+  link.href = ref.href;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.setAttribute('aria-label', '근거 ' + ref.number + '. ' + ref.title + ' (새 창)');
+  return link;
+}
+
+function writeInline(parent, text, sources) {
+  const tokens = text.split(/(\*\*[^*\n]+\*\*|\[\s*근거\s*[:：][^\]\n]+\])/gu);
+  for (const token of tokens) {
+    if (token.startsWith('**') && token.endsWith('**')) {
+      const strong = node('strong');
+      writeInline(strong, token.slice(2, -2), sources);
+      parent.append(strong);
+      continue;
+    }
+    const citation = token.match(/^\[\s*근거\s*[:：]([^\]]+)\]$/u);
+    const refs = citation?.[1].split(/[,，]/u).map(id => sources.get(id.trim()));
+    if (refs?.length && refs.every(Boolean)) {
+      for (const ref of refs) parent.append(sourceLink(ref, '[' + ref.number + ']'));
+    } else {
+      parent.append(document.createTextNode(token));
+    }
+  }
+}
+
+function renderAnswer(answer, sources) {
+  const body = node('div');
+  body.className = 'answer-body';
+  let group = body;
+  let list = null;
+  for (const raw of answer.split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line) { list = null; continue; }
+    const plain = line.replace(/\*\*/g, '').replace(/[:：]\s*$/, '');
+    const heading = plain.match(/^#{1,6}\s+(.+)/)?.[1]
+      || plain.match(/^(?:\d+[.)]\s*)?(핵심 자문|오늘 해볼 지원|이어서 확인할 점|자세히 보기|근거와 적용 한계)$/)?.[1];
+    if (heading) {
+      list = null;
+      if (/^(자세히 보기|근거와 적용 한계)$/.test(heading)) {
+        group = node('details');
+        group.append(node('summary', heading));
+      } else {
+        group = node('div');
+        if (heading === '이어서 확인할 점') group.className = 'next-question';
+        group.append(node('h3', heading));
+      }
+      body.append(group);
+      continue;
+    }
+    const bullet = line.match(/^([-*•]|\d+[.)])\s+(.+)$/u);
+    if (bullet) {
+      const ordered = /^\d/.test(bullet[1]);
+      const tag = ordered ? 'ol' : 'ul';
+      if (!list || list.localName !== tag) {
+        list = node(tag);
+        if (ordered) list.start = parseInt(bullet[1], 10);
+        group.append(list);
+      }
+      const item = node('li');
+      writeInline(item, bullet[2], sources);
+      list.append(item);
+    } else {
+      list = null;
+      const p = node('p');
+      writeInline(p, line, sources);
+      group.append(p);
+    }
+  }
+  return body;
+}
+
+function setConversationMode(ongoing) {
+  const heading = direct('conversationHeading');
+  if (heading) {
+    heading.textContent = ongoing ? '자문 대화' : '어떤 어려움이 있으신가요?';
+    direct('conversationIntro').hidden = ongoing;
+    direct('followPrompts').hidden = !ongoing;
+    direct('questionLabel').textContent = ongoing ? '이어서 이야기하기' : '고민 또는 추가 질문';
+  }
+  direct('directQuestion').placeholder = ongoing ? '답하거나 더 궁금한 점을 적어 주세요.' : '지원 과정에서 겪고 있는 어려움을 이야기해 주세요.';
+  direct('askButton').textContent = ongoing ? '후속 질문 보내기' : '전문자문 받기';
+}
+
+direct('followPrompts')?.addEventListener('click', event => {
+  const button = event.target.closest('button[data-prompt]');
+  if (!button) return;
+  const input = direct('directQuestion');
+  const text = input.value.trimEnd();
+  if (!text.endsWith(button.dataset.prompt)) {
+    const joined = text ? text + '\n' + button.dataset.prompt : button.dataset.prompt;
+    if (joined.length <= input.maxLength) input.value = joined;
+  }
+  input.focus();
+});
+
+function appendAnswer(question, data) {
+  const turn = node('article');
+  turn.className = 'consult-turn';
+  const user = node('p', question);
+  user.className = 'chatmsg user';
+  const sources = citedSources(data);
+  const answerBody = renderAnswer(data.answer, sources);
+  turn.append(user, answerBody);
+  const refs = [...sources.values()];
+  if (refs.length) {
+    const details = node('details');
+    details.className = 'turn-sources';
+    details.append(node('summary', '인용한 자료 ' + refs.length + '건'));
+    for (const ref of refs) details.append(sourceLink(ref, '[' + ref.number + '] ' + ref.title));
+    turn.append(details);
+  }
+  const links = [...sources].map(([id, ref]) => '[' + id + '] ' + ref.title + ' — ' + ref.href);
+  const text = [data.answer, ...links].join('\n\n');
+  const actions = node('div');
+  actions.className = 'turn-actions';
+  const read = window.consultationVoice?.readButton(data.answer);
+  if (read) actions.append(read);
   for (const label of ['자문 복사', '자문 공유']) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -208,10 +318,20 @@ function appendAnswer(question, data) {
     };
     actions.append(button);
   }
-  log.append(actions);
+  turn.append(actions);
+  direct('directChat').append(turn);
+  setConversationMode(true);
+  if (location.hash !== '#register' && direct('directQuestion').value.trim() === question) {
+    turn.scrollIntoView({ block: 'start' });
+  }
 }
 
 async function askDirect() {
+  if (window.consultationVoice?.finishDictation()) {
+    direct('directStatus').textContent = '음성 입력을 마친 뒤 옮겨진 내용을 확인하고 보내 주세요.';
+    return;
+  }
+  window.consultationVoice?.stop();
   const input = direct('directQuestion');
   const question = input.value.trim();
   const status = direct('directStatus');
@@ -228,9 +348,14 @@ async function askDirect() {
   }
   const candidates = selectLocalReferences(question);
   const localReferences = candidates.length && confirm('관련 등록 자료 일부를 자문 서버로 전송할까요? 공개자료이며 개인정보가 없는 경우에만 동의하세요. 취소해도 일반 자문은 진행됩니다.') ? candidates : [];
-  const history = directHistory.slice(-6).map(({ role, content }) => ({ role, content: content.slice(0, 2000) }));
+  // Keep the original concern when a conversation extends beyond three exchanges.
+  const recent = directHistory.length <= 6 ? directHistory : [directHistory[0], ...directHistory.slice(-4)];
+  const history = recent.map(({ role, content }) => ({
+    role, content: content.length <= 2000 ? content : content.slice(0, 1450) + '\n…\n' + content.slice(-540),
+  }));
   const controller = new AbortController();
   activeRequest = controller;
+  if (direct('voiceStatus')) direct('voiceStatus').textContent = '';
   direct('askButton').disabled = true;
   direct('alternate').hidden = true;
   status.textContent = '자문 서버에 질문을 보내고 있습니다…';

@@ -1,7 +1,7 @@
 import { copyFile, mkdir, mkdtemp, rename, rm } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
-const assets = ['index.html', 'consultation.js', 'manifest.json', 'icon.svg', 'sw.js',
+const assets = ['index.html', 'consultation.js', 'consultation-voice.js', 'manifest.json', 'icon.svg', 'sw.js',
   'knowledge/evidence.json', 'knowledge/dedup.mjs'];
 const stage = await mkdtemp('.compass-build-');
 try {

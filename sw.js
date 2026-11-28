@@ -1,5 +1,5 @@
-const CACHE = 'care-compass-pro-v4';
-const shell = ['./', './consultation.js', './manifest.json', './icon.svg', './knowledge/dedup.mjs', './knowledge/evidence.json'];
+const CACHE = 'care-compass-pro-v5';
+const shell = ['./', './consultation.js', './consultation-voice.js', './manifest.json', './icon.svg', './knowledge/dedup.mjs', './knowledge/evidence.json'];
 const urls = new Set(shell.map(path => new URL(path, self.registration.scope).href));
 self.addEventListener('install', event => event.waitUntil(
   caches.open(CACHE).then(cache => cache.addAll(shell.map(path => new Request(path, { cache: 'reload' }))))

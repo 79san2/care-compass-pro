@@ -30,3 +30,17 @@ test('unlisted IDs cannot pass as spaced or grouped citations', async () => {
     await assert.rejects(consult({question:'소진', evidence, policy:{}, generate:async () => answer}), /Unknown evidence/);
   }
 });
+
+test('follow-up drafting and review both receive the conversation and follow-up instructions', async () => {
+  const history = [{role: 'user', content: '팀원 소진'}, {role: 'assistant', content: '어느 시간대가 가장 힘든가요?'}];
+  const calls = [];
+  await consult({question: '오후입니다.', history, evidence, policy: {}, generate: async messages => {
+    calls.push(messages);
+    return '모의 응답';
+  }});
+  for (const [system, input] of calls) {
+    assert.match(system.content, /이번에는 후속 대화다/);
+    assert.deepEqual(JSON.parse(input.content).history, history);
+    assert.equal(JSON.parse(input.content).question, '오후입니다.');
+  }
+});
